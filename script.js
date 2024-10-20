@@ -1,4 +1,6 @@
 /*
+    Pseudocode
+    
     A game of rock-paper-scissors with 5 rounds
     Request user for input 
     Randomly generate result and compare
@@ -48,7 +50,6 @@ let count = 5;
 while (count > 0) {
     let choice = generateComputerChoice();
     const userInput = prompt("Which one u wanna pick? \n ('rock', 'paper', 'scissors'").toLowerCase();
-
 
     if (!isValidInput(userInput)) {
         alert ("Invalid Input");
