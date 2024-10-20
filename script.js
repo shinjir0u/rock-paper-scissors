@@ -36,3 +36,74 @@
     
 */
 
+const ROCK = "rock";
+const PAPER = "paper";
+const SCISSORS = "scissors";
+const WIN = "win";
+const LOSE = "lose";
+const DRAW = "draw";
+let result = "";
+let count = 5;
+
+while (count > 0) {
+    let choice = generateComputerChoice();
+    const userInput = prompt("Which one u wanna pick? \n ('rock', 'paper', 'scissors'").toLowerCase();
+
+
+    if (!isValidInput(userInput)) {
+        alert ("Invalid Input");
+        continue;
+    }
+    
+    result += compareTheInputs(userInput, choice) + " ";
+    count--;
+    console.log(result);
+    // console.log(`User: ${userInput}, Computer: ${choice}`);
+}
+
+function isValidInput(input) {
+    return (input === "rock" || input === "paper" || input === "scissors");
+}
+
+function generateComputerChoice() {
+    let choice = Math.floor(Math.random() * 3);
+
+    switch (choice) {
+        case 0:
+            return ROCK;
+            break;
+        case 1:
+            return PAPER;
+            break;
+        case 2:
+            return SCISSORS;
+            break;
+    }
+}
+
+function compareTheInputs(userInput, computerInput) {
+    if (userInput === ROCK) {
+        if (computerInput === ROCK)
+            return DRAW;
+        else if (computerInput === PAPER)
+            return LOSE;
+        else
+            return WIN;
+    }
+    else if (userInput === PAPER) {
+        if (computerInput === ROCK) 
+            return WIN;
+        else if (computerInput === PAPER)
+            return DRAW;
+        else
+            return LOSE;
+    }
+    else {
+        if (computerInput === ROCK)
+            return LOSE;
+        else if (computerInput === PAPER)
+            return WIN;
+        else
+            return DRAW;
+    }
+}
