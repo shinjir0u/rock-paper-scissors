@@ -1,6 +1,6 @@
 /*
     Pseudocode
-    
+
     A game of rock-paper-scissors with 5 rounds
     Request user for input 
     Randomly generate result and compare
@@ -38,35 +38,53 @@
     
 */
 
+/*
+    Differences with odin project guideline
+
+    I only looked up the logic and started myself so there's some differences.
+    1. userInput is assigned from prompt directly instead of assigning via a function.
+    2. result is shown as win, lose or draw rather than individual scores.
+    3. the overall logic isn't wrapped with a function 
+*/
 const ROCK = "rock";
 const PAPER = "paper";
 const SCISSORS = "scissors";
 const WIN = "win";
 const LOSE = "lose";
 const DRAW = "draw";
-let result = "";
-let count = 5;
 
-while (count > 0) {
-    let choice = generateComputerChoice();
-    const userInput = prompt("Which one u wanna pick? \n ('rock', 'paper', 'scissors'").toLowerCase();
+playGame();
 
-    if (!isValidInput(userInput)) {
-        alert ("Invalid Input");
-        continue;
+function playGame() {
+    let result = "";
+    let count = 5;
+    
+    while (count > 0) {
+        let choice = getComputerChoice();
+        const userInput = getUserInput();
+    
+        if (!isValidInput(userInput)) {
+            alert ("Invalid Input");
+            continue;
+        }
+        
+        result += compareTheInputs(userInput, choice) + " ";
+        count--;
+        console.log(result);
+        // console.log(`User: ${userInput}, Computer: ${choice}`);
     }
     
-    result += compareTheInputs(userInput, choice) + " ";
-    count--;
-    console.log(result);
-    // console.log(`User: ${userInput}, Computer: ${choice}`);
+}
+
+function getUserInput() {
+    return prompt("Which one u wanna pick? \n ('rock', 'paper', 'scissors'").toLowerCase();
 }
 
 function isValidInput(input) {
     return (input === "rock" || input === "paper" || input === "scissors");
 }
 
-function generateComputerChoice() {
+function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3);
 
     switch (choice) {
