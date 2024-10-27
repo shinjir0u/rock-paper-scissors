@@ -35,49 +35,101 @@
     Return the number
 
     <-- Compare Function -->
-    
 */
 
 /*
-    Differences with odin project guideline
+    Improved Version
+        Score is now set for both user and computer
+        Game will be determined by who gets 5 wins first
+        Add a UI
+            Three buttons for each selection
+    
+    Psuedocode
+        Create variable to keep track of scores (userScore and computerScore)
+        While userScore and computerScore aren't equal to 5
+            Get computer choice function
+            Get user choice function
 
-    I only looked up the logic and started myself so there's some differences.
-    1. userInput is assigned from prompt directly instead of assigning via a function.
-    2. result is shown as win, lose or draw rather than individual scores.
-    3. the overall logic isn't wrapped with a function 
+            Remove the function to check valid input
+            Get match result function 
+            Set score based on result and show the choices and results
+
+        UI
+            Create a div with three div child elements (rock, paper, scissors)
+            Three elements will have two class names (respective names and choice)
+            Style the three elements with space-around alignment
+            Add some background color
+
+        User choice function
+            Create a nodeList containing three elements with querySelector
+            Add event listener for each node
+            return the text content of the clicked element node (case changed to lower case)
+
+        
 */
+
 const ROCK = "rock";
 const PAPER = "paper";
 const SCISSORS = "scissors";
 const WIN = "win";
 const LOSE = "lose";
 const DRAW = "draw";
+let userScore = 0;
+let computerScore = 0;
 
-playGame();
+const buttons = document.querySelectorAll(".choice");
+const resultPanel = document.querySelector(".result-panel");
 
-function playGame() {
-    let result = "";
-    let count = 5;
-    
-    while (count > 0) {
-        let choice = getComputerChoice();
-        const userInput = getUserInput();
-    
-        if (!isValidInput(userInput)) {
-            alert ("Invalid Input");
-            continue;
-        }
-        
-        result += compareTheInputs(userInput, choice) + " ";
-        count--;
-        console.log(result);
-        // console.log(`User: ${userInput}, Computer: ${choice}`);
+if (buttons) {
+    for (let button of buttons) {
+        button.addEventListener("click", playRound);
     }
-    
 }
 
-function getUserInput() {
-    return prompt("Which one u wanna pick? \n ('rock', 'paper', 'scissors'").toLowerCase();
+function playRound(event) {
+    let roundResult = "";
+    let userChoice, computerChoice;
+
+    userChoice = event.target.textContent.toLowerCase();
+    computerChoice = getComputerChoice();
+    roundResult = getMatchResult(userChoice, computerChoice);
+    resultPanel.textContent = `You chose ${userChoice} and Computer chose ${computerChoice}.`;
+    if (roundResult === WIN) {
+        userScore++;
+        resultPanel.append(`\nYou Win This round.`);                        
+    }
+    else if (roundResult === LOSE) {
+        computerScore++;
+        resultPanel.append(`\nYou Lose this round.`);
+    }
+    else {
+        resultPanel.append(`\nThe result is Draw.`);        
+    }
+    let scoreBoard = `\nCurrent Score: User - ${userScore} and Computer - ${computerScore}.`;
+    resultPanel.append(scoreBoard);
+    
+    if (winGame(userScore)) {
+        resultPanel.append("\nCongratulation. You Win.");
+        removeEventListener("click", playRound);
+    }
+    else if (winGame(computerScore)) {
+        resultPanel.append("\nGame over");
+        removeEventListener("click", playRound);
+    }
+}
+
+function removeEventListener(event, functionAdded) {
+    buttons.forEach( (button) => {
+        button.removeEventListener(event, functionAdded);
+    });
+}
+
+function endGame(userScore, computerScore) {
+    return userScore === 5 || computerScore === 5;
+}
+
+function winGame(score) {
+    return score === 5;
 }
 
 function isValidInput(input) {
@@ -100,27 +152,27 @@ function getComputerChoice() {
     }
 }
 
-function compareTheInputs(userInput, computerInput) {
-    if (userInput === ROCK) {
-        if (computerInput === ROCK)
+function getMatchResult(userChoice, computerChoice) {
+    if (userChoice === ROCK) {
+        if (computerChoice === ROCK)
             return DRAW;
-        else if (computerInput === PAPER)
+        else if (computerChoice === PAPER)
             return LOSE;
         else
             return WIN;
     }
-    else if (userInput === PAPER) {
-        if (computerInput === ROCK) 
+    else if (userChoice === PAPER) {
+        if (computerChoice === ROCK) 
             return WIN;
-        else if (computerInput === PAPER)
+        else if (computerChoice === PAPER)
             return DRAW;
         else
             return LOSE;
     }
     else {
-        if (computerInput === ROCK)
+        if (computerChoice === ROCK)
             return LOSE;
-        else if (computerInput === PAPER)
+        else if (computerChoice === PAPER)
             return WIN;
         else
             return DRAW;
